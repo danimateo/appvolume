@@ -16,7 +16,9 @@ Place this somewhere in your path with execute permissions.
 2. Toggle muting an application. If only one is playing sound it mutes it without displaying the list.
 
    ``appvol m``
+
    This produces:
+
    ```
    1) Chromium
    2) SuperTuxKart
@@ -27,7 +29,9 @@ Place this somewhere in your path with execute permissions.
 3. Set volume of an application (percentages). If only one is playing sound it sets the volume without displaying the list.
 
     Example: ``appvol 50``
+
     This produces:
+    
     ```
     1) Chromium
     1) SuperTuxKart
