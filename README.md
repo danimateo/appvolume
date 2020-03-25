@@ -13,7 +13,7 @@ Place this somewhere in your path with execute permissions.
    2) SuperTuxKart - 50% MUTED
    ```
 
-2. Toggle muting an application. If only one is playing sound it mutes it without displaying the list.
+2. Toggle muting an application. If only one is playing sound it mutes/unmutes it without displaying the list.
 
    ``appvol m``
 
@@ -31,7 +31,7 @@ Place this somewhere in your path with execute permissions.
     Example: ``appvol 50``
 
     This produces:
-    
+
     ```
     1) Chromium
     1) SuperTuxKart
