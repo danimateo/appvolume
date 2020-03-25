@@ -1,0 +1,96 @@
+#!/usr/bin/python
+
+import subprocess
+import sys
+import re
+
+
+def usage():
+    print("Usage: appvol.py [m, int]")
+    print("m - toggles mute for input sink")
+    print("int - percentage to set volume")
+    exit(0)
+
+
+def toggle_mute(id, name, stat):
+    if subprocess.call(
+            ["pactl", "set-sink-input-mute", id, "toggle"]) == 0:
+        if(stat == "yes"):
+            print("%s was unmuted" % name)
+        else:
+            print("%s was muted" % name)
+        exit(0)
+    else:
+        print("Error occured")
+        exit(1)
+
+
+def set_volume(id, vol, name):
+    if subprocess.call(
+            ["pactl", "set-sink-input-volume", id, vol + "%"]) == 0:
+        print("Volume for %s was set to %s%%" % (name, vol))
+        exit(0)
+    else:
+        print("Error occured")
+        exit(1)
+
+
+def main():
+
+    arg = ""
+
+    if len(sys.argv) == 2:
+        arg = sys.argv[1]
+    else:
+        usage()
+
+    if(not arg.isdigit() and not arg == "m" and not arg == "l"):
+        usage()
+
+    res = subprocess.check_output(["pacmd", "list-sink-inputs"])
+
+    res = res.decode("utf-8")
+
+    indexes = re.findall(r"index:\s+(\d+)", res)
+    volumes = re.findall(r"front-left:\s+\d{1,5}\s+/\s+(\d?\d?\d)%", res)
+    app_names = re.findall(r"application.name\s+=\s+\"(.+)\"", res)
+    muted = re.findall(r"muted:\s+(yes|no)", res)
+
+    if(len(indexes) == 0):
+        print("No input sinks present")
+        exit(0)
+
+    if(arg == "l"):
+        for i, item in enumerate(app_names):
+            name = "%s) %s - %s%%" % (i+1, item, volumes[i])
+            if(muted[i] == "yes"):
+                name += " MUTED"
+            print(name)
+        exit(0)
+
+    if(len(indexes) == 1):
+        if arg == "m":
+            toggle_mute(indexes[0], app_names[0], muted[0])
+        set_volume(indexes[0], arg, app_names[0])
+
+    for i, item in enumerate(app_names):
+        print("%s) %s" % (i+1, item))
+
+    try:
+        choice = input("Select an input sink: ")
+    except KeyboardInterrupt:
+        print("\nProgram was interrupted")
+        exit(0)
+
+    list_index = int(choice) - 1
+    choice_id = indexes[list_index]
+    app_name = app_names[list_index]
+    muted_stat = muted[list_index]
+
+    if arg == "m":
+        toggle_mute(choice_id, app_name, muted_stat)
+    set_volume(choice_id, arg, app_name)
+
+
+if __name__ == '__main__':
+    main()
