@@ -6,7 +6,7 @@ import re
 
 
 def usage():
-    print("Usage: appvol.py [m, int]")
+    print("Usage: appvol.py m|int")
     print("m - toggles mute for input sink")
     print("int - percentage to set volume")
     exit(0)
