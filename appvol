@@ -52,13 +52,17 @@ def main():
     res = res.decode("utf-8")
 
     indexes = re.findall(r"index:\s+(\d+)", res)
-    volumes = re.findall(r"front-left:\s+\d{1,5}\s+/\s+(\d?\d?\d)%", res)
+    volumes = re.findall(r"volume:.+/\s+(\d?\d?\d)%", res)
     app_names = re.findall(r"application.name\s+=\s+\"(.+)\"", res)
     muted = re.findall(r"muted:\s+(yes|no)", res)
 
     if(len(indexes) == 0):
         print("No input sinks present")
         exit(0)
+
+    print(app_names)
+    print(volumes)
+    print(muted)
 
     if(arg == "l"):
         for i, item in enumerate(app_names):
